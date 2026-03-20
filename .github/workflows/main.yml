@@ -1,0 +1,48 @@
+name: Lint Code
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+
+  lint_python:
+    name: Lint Python Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Install dependencies
+        run: pip install flake8
+
+      - name: Run Python Linter
+        run: |
+          cd server
+          flake8 *.py
+          echo "Python linting completed"
+
+  lint_js:
+    name: Lint JS Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+
+      - name: Install JSHint
+        run: npm install -g jshint
+
+      - name: Run JS Linter
+        run: |
+          find . -name "*.js" -exec jshint {} \;
+          echo "JS linting completed" 
